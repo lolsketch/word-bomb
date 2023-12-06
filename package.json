@@ -1,32 +1,37 @@
 {
-  "name": "word-dash",
-  "version": "0.0.0",
+  "name": "partykit-vite-react",
   "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "partykit dev",
-    "deploy": "partykit deploy",
-    "dev-v": "vite",
-    "build": "tsc && vite build",
+    "dev": "npm-run-all --parallel client:dev server:dev",
+    "client:dev": "vite",
+    "client:build": "tsc && vite build",
+    "client:preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "server:dev": "partykit dev",
+    "deploy": "yarn client:build && partykit deploy"
   },
   "dependencies": {
-    "partysocket": "0.0.16",
+    "lodash.throttle": "^4.1.1",
+    "partykit": "^0.0.32",
+    "partysocket": "^0.0.12",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "partykit": "0.0.39",
-    "typescript": "^5.3.2",
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
-    "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "^8.53.0",
+    "@types/lodash.throttle": "^4.1.8",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "vite": "^5.0.0"
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.5"
   }
 }

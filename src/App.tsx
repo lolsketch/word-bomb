@@ -1,14 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Reactions } from "./components/Reactions";
+import { getPostId } from "./utils";
+import reactLogo from "./assets/react.svg";
+import partyKitLogo from "./assets/partykit.png";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const postID = getPostId();
 
   return (
     <>
       <div>
+        <a href="https://partykit.io" target="_blank">
+          <img
+            src={partyKitLogo}
+            className="logo partkit"
+            alt="PartyKit logo"
+          />
+        </a>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -16,20 +25,15 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>PartyKit + Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <Reactions postID={postID} />
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Click on the PartyKit, Vite and React logos to learn mores
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

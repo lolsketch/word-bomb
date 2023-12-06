@@ -1,9 +1,9 @@
 {
-  "name": "word-dash",
-  "main": "src/server.ts",
-  "compatibilityDate": "2023-12-06",
-  "serve": {
-    "path": "public",
-    "build": "src/client.ts"
-  }
+	"name": "partykit-vite-react",
+	"main": "src/server/server.ts",
+	"compatibilityDate": "2023-10-18",
+	"serve": {
+		"path": "dist",
+		"singlePageApp": true
+	}
 }
