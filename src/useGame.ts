@@ -1,15 +1,17 @@
-import { useState } from "react";
 import usePartySocket from "partysocket/react";
-import { parseUpdate, type Action, createAction } from "../server/types";
+import { getPostId } from "./utils";
+import { useState } from "react";
+import { parseUpdate, type Action, createAction } from "./server/types";
 
 // In case of custom setup, change this to your server's host
 const host = import.meta.env.PROD
   ? window.location.origin
   : "http://localhost:1999";
 
-export const Reactions = ({ postID }: { postID: string }) => {
-  const [typing, setTyping] = useState<string>("");
+export function useGame() {
+  const [typing, setTyping] = useState("");
 
+  const postID = getPostId();
   const socket = usePartySocket({
     host,
     room: postID,
@@ -23,17 +25,10 @@ export const Reactions = ({ postID }: { postID: string }) => {
     socket.send(createAction(action));
   }
 
-  return (
-    <div>
-      <input
-        onChange={(e) =>
-          send({
-            action: "type",
-            value: e.target.value,
-          })
-        }
-        value={typing}
-      ></input>
-    </div>
-  );
-};
+  return {
+    onTypeAnswer: (answer: string) => {
+      send({ action: "type", value: answer });
+    },
+    currentAnswer: typing,
+  };
+}

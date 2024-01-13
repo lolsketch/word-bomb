@@ -3,12 +3,12 @@ import { createUpdate, parseAction } from "./types";
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
   typing: string = "";
 
   async onStart() {
     // Load counter from storage on startup
-    this.typing = (await this.party.storage.get<string>("typing")) ?? "";
+    this.typing = (await this.room.storage.get<string>("typing")) ?? "";
   }
 
   onConnect(connection: Party.Connection) {
@@ -24,8 +24,8 @@ export default class Server implements Party.Server {
     switch (parsed.action) {
       case "type":
         this.typing = parsed.value!;
-        this.party.storage.put("typing", this.typing);
-        this.party.broadcast(
+        this.room.storage.put("typing", this.typing);
+        this.room.broadcast(
           createUpdate({
             action: "typing",
             value: this.typing,

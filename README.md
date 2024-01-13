@@ -2,6 +2,12 @@
 
 ### Demo: https://word-dash.devonpmack.partykit.dev
 
+## Setup
+
+1. `yarn install`
+2. `yarn client:build`
+3. `yarn dev` (open the first link with Vite, not the second)
+
 Welcome to the party, pal!
 
 This template provides a minimal setup to get PartyKit & React working in Vite with HMR and some ESLint rules.
