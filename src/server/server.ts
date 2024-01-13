@@ -26,6 +26,7 @@ export default class Server implements Party.Server {
         id: connection.id,
         lives: 3,
         name: "Poro",
+        playersTurn: false
       };
       this.game.players[connection.id] = newPlayer;
     }

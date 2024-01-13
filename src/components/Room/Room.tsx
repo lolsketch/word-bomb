@@ -1,5 +1,6 @@
 import type { GameState } from "../../server/types";
 import "./Room.css";
+import { Player } from "./components/Player/Player";
 
 interface Props {
   game: GameState;
@@ -7,14 +8,12 @@ interface Props {
 
 export const Room = ({ game }: Props) => {
   return (
-    <>
+    <div className="container">
       {Object.entries(game.players).map(([id, playerState]) => {
         return (
-          <p key={id}>
-            Player {id} - Lives: {playerState.lives}
-          </p>
+          <Player player={playerState} playersTurn={game.currentTurn === id} />
         );
       })}
-    </>
+    </div>
   );
 };
