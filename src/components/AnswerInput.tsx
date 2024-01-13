@@ -15,6 +15,7 @@ export const AnswerInput = ({ onTypeAnswer, currentAnswer, game }: Props) => {
       }}
     >
       <input
+        disabled={game.game?.currentTurn === game.myID ? false : true}
         onChange={(e) => onTypeAnswer(e.target.value)}
         value={currentAnswer}
       ></input>

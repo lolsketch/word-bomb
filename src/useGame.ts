@@ -38,10 +38,14 @@ export function useGame() {
     onTypeAnswer: (answer: string) => {
       send({ action: "type", value: answer });
     },
-    currentAnswer: game?.typing,
+    currentAnswer: game?.typing ?? "",
     onGuess: (guess: string) => {
       send({ action: "guess", value: guess });
     },
+    start() {
+      send({ action: "start" });
+    },
+    myID: socket.id,
     game,
   };
 }

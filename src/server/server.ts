@@ -1,6 +1,6 @@
 import type * as Party from "partykit/server";
 import { createUpdate, parseAction, type GameState } from "./types";
-import { pickQuestion } from "./models/Game";
+import { nextTurn, pickQuestion, startGame } from "./models/Game";
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
@@ -48,9 +48,12 @@ export default class Server implements Party.Server {
         if (this.game.question?.answer.includes(guess)) {
           console.log("Correct guess!");
           pickQuestion(this.game);
+          nextTurn(this.game);
           this.game.typing = "";
         }
-
+        break;
+      case "start":
+        startGame(this.game);
         break;
     }
 

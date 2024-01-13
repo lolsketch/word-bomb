@@ -3,11 +3,14 @@ export type Action =
   | {
       action: "guess";
       value: string;
-    };
+    }
+  | { action: "start" };
 
 export type Update =
   | { action: "typing"; value: string }
   | { action: "game"; value: GameState };
+
+export type PlayerID = string;
 
 export interface PlayerState {
   id: string;
@@ -18,7 +21,7 @@ export interface PlayerState {
 export interface GameState {
   id: string;
   players: { [id: string]: PlayerState };
-  currentTurn: string | null;
+  currentTurn: PlayerID | null;
   question: { question: string; answer: string[] } | null;
   typing: string;
 }

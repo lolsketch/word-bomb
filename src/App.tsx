@@ -21,6 +21,7 @@ function App() {
           currentAnswer={game.currentAnswer}
         />
       </div>
+      <button onClick={game.start}>Start</button>
     </>
   );
 }
