@@ -19,8 +19,8 @@ export default class Server implements Party.Server {
     if (!game) {
       game = {
         id: this.room.id,
-        players: {}
-      }
+        players: {},
+      };
     }
 
     const player = game.players[connection.id];
@@ -28,8 +28,8 @@ export default class Server implements Party.Server {
       const newPlayer = {
         id: connection.id,
         lives: 3,
-        name: "Poro"
-      }
+        name: "Poro",
+      };
       game.players[connection.id] = newPlayer;
       await this.room.storage.put("game", game);
     }
