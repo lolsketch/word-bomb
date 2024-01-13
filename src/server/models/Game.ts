@@ -7,6 +7,10 @@ export function startGame(game: GameState, sync: () => void) {
   game.currentTurn = sample(Object.keys(game.players))!;
   pickQuestion(game);
   startTurnTimer(game, sync);
+
+  for (const player of Object.values(game.players)) {
+    player.lives = 3;
+  }
 }
 
 export function nextTurn(game: GameState, sync: () => void) {
@@ -14,14 +18,12 @@ export function nextTurn(game: GameState, sync: () => void) {
     (p) => game.players[p].lives > 0
   );
 
+  game.typing = "";
+
   if (players.length <= 1) {
     // game over
-    game.typing = "";
     game.currentTurn = null;
     game.question = null;
-    for (const player of Object.values(game.players)) {
-      player.lives = 3;
-    }
 
     return;
   }
@@ -45,9 +47,7 @@ export function pickQuestion(game: GameState) {
 }
 
 export function startTurnTimer(game: GameState, sync: () => void) {
-  console.log("START");
   game.timer = setTimeout(() => {
-    console.log("END");
     game.players[game.currentTurn!].lives--; // dead
     nextTurn(game, sync);
     sync();

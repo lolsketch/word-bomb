@@ -26,7 +26,7 @@ export default class Server implements Party.Server {
     if (!player) {
       const newPlayer = {
         id: connection.id,
-        lives: 3,
+        lives: 0,
         name: "Poro",
         playersTurn: false,
       };
