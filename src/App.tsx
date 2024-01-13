@@ -1,8 +1,4 @@
 import { AnswerInput } from "./components/AnswerInput";
-import { getPostId } from "./utils";
-// import reactLogo from "./assets/react.svg";
-// import partyKitLogo from "./assets/partykit.png";
-// import viteLogo from "/vite.svg";
 import "./App.css";
 import { useGame } from "./useGame";
 import { Room } from "./components/Room";
@@ -15,8 +11,8 @@ function App() {
 
   return (
     <>
-    <h1>Porodle</h1>
-    <Room game={game.game} />
+      <h1>Porodle</h1>
+      <Room game={game.game} />
       <div className="card">
         <AnswerInput
           onTypeAnswer={game.onTypeAnswer}

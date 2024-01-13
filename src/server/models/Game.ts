@@ -1,3 +1,3 @@
-import { GameState } from "../types";
+import { type GameState } from "../types";
 
-export function startGame(game: GameState) {}
+export function startGame(_game: GameState) {}
