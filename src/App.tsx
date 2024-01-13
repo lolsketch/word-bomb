@@ -14,7 +14,9 @@ function App() {
       <h1>Porodle</h1>
       <Room game={game.game} />
       <div className="card">
+        <p>{game.game.question?.question}</p>
         <AnswerInput
+          game={game}
           onTypeAnswer={game.onTypeAnswer}
           currentAnswer={game.currentAnswer}
         />

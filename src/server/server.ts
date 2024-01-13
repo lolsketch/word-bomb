@@ -1,11 +1,12 @@
 import type * as Party from "partykit/server";
 import { createUpdate, parseAction, type GameState } from "./types";
+import { pickQuestion } from "./models/Game";
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
   constructor(readonly room: Party.Room) {}
   typing: string = "";
-  game: GameState = { id: "", players: {}, currentTurn: null };
+  game: GameState = { id: "", players: {}, currentTurn: null, question: null };
 
   async onStart() {
     this.typing = (await this.room.storage.get<string>("typing")) ?? "";
@@ -24,15 +25,11 @@ export default class Server implements Party.Server {
         name: "Poro",
       };
       this.game.players[connection.id] = newPlayer;
-      await this.room.storage.put("game", this.game);
     }
 
-    this.room.broadcast(
-      createUpdate({
-        action: "game",
-        value: this.game,
-      })
-    );
+    pickQuestion(this.game);
+
+    this.sync();
   }
 
   onMessage(message: string, _sender: Party.Connection) {
@@ -49,7 +46,18 @@ export default class Server implements Party.Server {
           })
         );
         break;
+      case "guess":
+        const guess = parsed.value;
+
+        if (this.game.question?.answer.includes(guess)) {
+          console.log("Correct guess!");
+          pickQuestion(this.game);
+        }
+
+        break;
     }
+
+    this.sync();
   }
 
   async onClose(connection: Party.Connection) {
@@ -64,6 +72,16 @@ export default class Server implements Party.Server {
         value: this.game,
       })
     );
+  }
+
+  private async sync() {
+    this.room.broadcast(
+      createUpdate({
+        action: "game",
+        value: this.game,
+      })
+    );
+    await this.room.storage.put("game", this.game);
   }
 }
 

@@ -1,4 +1,9 @@
-export type Action = { action: "type"; value: string };
+export type Action =
+  | { action: "type"; value: string }
+  | {
+      action: "guess";
+      value: string;
+    };
 
 export type Update =
   | { action: "typing"; value: string }
@@ -14,6 +19,7 @@ export interface GameState {
   id: string;
   players: { [id: string]: PlayerState };
   currentTurn: string | null;
+  question: { question: string; answer: string[] } | null;
 }
 
 export function createAction(action: Action): string {

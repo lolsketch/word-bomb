@@ -1,7 +1,12 @@
 import usePartySocket from "partysocket/react";
 import { getPostId } from "./utils";
 import { useState } from "react";
-import { parseUpdate, type Action, createAction, type GameState } from "./server/types";
+import {
+  parseUpdate,
+  type Action,
+  createAction,
+  type GameState,
+} from "./server/types";
 
 // In case of custom setup, change this to your server's host
 const host = import.meta.env.PROD
@@ -38,6 +43,11 @@ export function useGame() {
       send({ action: "type", value: answer });
     },
     currentAnswer: typing,
-    game
+    onGuess: (guess: string) => {
+      send({ action: "guess", value: guess });
+    },
+    game,
   };
 }
+
+export type Game = ReturnType<typeof useGame>;

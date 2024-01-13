@@ -1,4 +1,8 @@
-const words = {
+export const questions: {
+  [length: string]: {
+    [question: string]: string[];
+  }[];
+} = {
   "2": [
     {
       er: [
