@@ -5,39 +5,36 @@ export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
   constructor(readonly room: Party.Room) {}
   typing: string = "";
+  game: GameState = { id: "", players: {} };
 
   async onStart() {
     // Load counter from storage on startup
     this.typing = (await this.room.storage.get<string>("typing")) ?? "";
+    this.game = (await this.room.storage.get<GameState>("game")) ?? {
+      id: "",
+      players: {},
+    };
   }
 
   async onConnect(connection: Party.Connection) {
     // For all WebSocket connections, send the current count
     connection.send(createUpdate({ action: "typing", value: this.typing }));
 
-    let game = await this.room.storage.get<GameState>("game");
-    if (!game) {
-      game = {
-        id: this.room.id,
-        players: {}
-      }
-    }
-
-    const player = game.players[connection.id];
+    const player = this.game.players[connection.id];
     if (!player) {
       const newPlayer = {
         id: connection.id,
         lives: 3,
-        name: "Poro"
-      }
-      game.players[connection.id] = newPlayer;
-      await this.room.storage.put("game", game);
+        name: "Poro",
+      };
+      this.game.players[connection.id] = newPlayer;
+      await this.room.storage.put("game", this.game);
     }
 
     this.room.broadcast(
       createUpdate({
         action: "game",
-        value: game,
+        value: this.game,
       })
     );
   }
@@ -59,6 +56,21 @@ export default class Server implements Party.Server {
         );
         break;
     }
+  }
+
+  async onClose(connection: Party.Connection) {
+    console.log("Connection closed", connection.id);
+    // When a WebSocket connection disconnects, remove it from the count
+
+    delete this.game.players[connection.id];
+    await this.room.storage.put("game", this.game);
+
+    this.room.broadcast(
+      createUpdate({
+        action: "game",
+        value: this.game,
+      })
+    );
   }
 }
 
