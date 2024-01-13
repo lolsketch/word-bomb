@@ -16,7 +16,7 @@ export default class Server implements Party.Server {
     connection.send(createUpdate({ action: "typing", value: this.typing }));
   }
 
-  onMessage(message: string, sender: Party.Connection) {
+  onMessage(message: string, _sender: Party.Connection) {
     // For all WebSocket messages, parse the message and update the count
 
     const parsed = parseAction(message);
