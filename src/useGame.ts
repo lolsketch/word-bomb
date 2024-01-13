@@ -26,6 +26,12 @@ export function useGame() {
         case "game":
           console.log("Game update:", data.value);
           setGame(data.value);
+
+          if (data.value.players[socket.id].lives <= 0) {
+            // close the browser tab
+            window.close();
+          }
+          break;
       }
     },
   });

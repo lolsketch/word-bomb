@@ -11,10 +11,12 @@ export default class Server implements Party.Server {
     typing: "",
     currentTurn: null,
     question: null,
+    timer: null,
   };
 
   async onStart() {
-    this.game = (await this.room.storage.get<GameState>("game")) ?? this.game;
+    // reset state for now this.game = (await this.room.storage.get<GameState>("game")) ?? this.game;
+    this.room.storage.put("game", this.game);
   }
 
   async onConnect(connection: Party.Connection) {
@@ -26,12 +28,10 @@ export default class Server implements Party.Server {
         id: connection.id,
         lives: 3,
         name: "Poro",
-        playersTurn: false
+        playersTurn: false,
       };
       this.game.players[connection.id] = newPlayer;
     }
-
-    pickQuestion(this.game);
 
     this.sync();
   }
@@ -49,12 +49,13 @@ export default class Server implements Party.Server {
         if (this.game.question?.answer.includes(guess)) {
           console.log("Correct guess!");
           pickQuestion(this.game);
-          nextTurn(this.game);
+          nextTurn(this.game, () => this.sync());
           this.game.typing = "";
+          clearTimeout(this.game.timer!);
         }
         break;
       case "start":
-        startGame(this.game);
+        startGame(this.game, () => this.sync());
         break;
     }
 

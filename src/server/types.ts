@@ -24,6 +24,7 @@ export interface GameState {
   currentTurn: PlayerID | null;
   question: { question: string; answer: string[] } | null;
   typing: string;
+  timer: ReturnType<typeof setTimeout> | null;
 }
 
 export function createAction(action: Action): string {
