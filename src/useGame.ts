@@ -14,7 +14,6 @@ const host = import.meta.env.PROD
   : "http://localhost:1999";
 
 export function useGame() {
-  const [typing, setTyping] = useState("");
   const [game, setGame] = useState<GameState | undefined>();
 
   const postID = getPostId();
@@ -24,9 +23,6 @@ export function useGame() {
     onMessage(event: MessageEvent<string>) {
       const data = parseUpdate(event.data);
       switch (data.action) {
-        case "typing":
-          setTyping(data.value);
-          break;
         case "game":
           console.log("Game update:", data.value);
           setGame(data.value);
@@ -42,7 +38,7 @@ export function useGame() {
     onTypeAnswer: (answer: string) => {
       send({ action: "type", value: answer });
     },
-    currentAnswer: typing,
+    currentAnswer: game?.typing,
     onGuess: (guess: string) => {
       send({ action: "guess", value: guess });
     },

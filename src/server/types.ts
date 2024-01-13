@@ -20,6 +20,7 @@ export interface GameState {
   players: { [id: string]: PlayerState };
   currentTurn: string | null;
   question: { question: string; answer: string[] } | null;
+  typing: string;
 }
 
 export function createAction(action: Action): string {

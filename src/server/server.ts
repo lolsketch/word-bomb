@@ -5,17 +5,20 @@ import { pickQuestion } from "./models/Game";
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
   constructor(readonly room: Party.Room) {}
-  typing: string = "";
-  game: GameState = { id: "", players: {}, currentTurn: null, question: null };
+  game: GameState = {
+    id: "",
+    players: {},
+    typing: "",
+    currentTurn: null,
+    question: null,
+  };
 
   async onStart() {
-    this.typing = (await this.room.storage.get<string>("typing")) ?? "";
     this.game = (await this.room.storage.get<GameState>("game")) ?? this.game;
   }
 
   async onConnect(connection: Party.Connection) {
     console.log("Connection opened", connection.id);
-    connection.send(createUpdate({ action: "typing", value: this.typing }));
 
     const player = this.game.players[connection.id];
     if (!player) {
@@ -37,14 +40,7 @@ export default class Server implements Party.Server {
 
     switch (parsed.action) {
       case "type":
-        this.typing = parsed.value!;
-        this.room.storage.put("typing", this.typing);
-        this.room.broadcast(
-          createUpdate({
-            action: "typing",
-            value: this.typing,
-          })
-        );
+        this.game.typing = parsed.value!;
         break;
       case "guess":
         const guess = parsed.value;
@@ -52,6 +48,7 @@ export default class Server implements Party.Server {
         if (this.game.question?.answer.includes(guess)) {
           console.log("Correct guess!");
           pickQuestion(this.game);
+          this.game.typing = "";
         }
 
         break;
