@@ -1,12 +1,11 @@
-import { useGame } from "../../useGame";
+import type { GameState } from "../../server/types";
 import "./Room.css";
 
-export const Room = () => {
-  const { game } = useGame();
-  if (!game) {
-    return <p>Game not found</p>;
-  }
+interface Props {
+  game: GameState;
+}
 
+export const Room = ({game}: Props) => {
   return (
     <>
       {Object.entries(game.players).map(([id, playerState]) => {
