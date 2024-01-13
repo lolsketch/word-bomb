@@ -1,7 +1,7 @@
 import usePartySocket from "partysocket/react";
 import { getPostId } from "./utils";
 import { useState } from "react";
-import { parseUpdate, type Action, createAction } from "./server/types";
+import { parseUpdate, type Action, createAction, type GameState } from "./server/types";
 
 // In case of custom setup, change this to your server's host
 const host = import.meta.env.PROD
@@ -10,6 +10,7 @@ const host = import.meta.env.PROD
 
 export function useGame() {
   const [typing, setTyping] = useState("");
+  const [game, setGame] = useState<GameState | undefined>();
 
   const postID = getPostId();
   const socket = usePartySocket({
@@ -23,6 +24,7 @@ export function useGame() {
           break;
         case "game":
           console.log("Game update:", data.value);
+          setGame(data.value);
       }
     },
   });
@@ -36,5 +38,6 @@ export function useGame() {
       send({ action: "type", value: answer });
     },
     currentAnswer: typing,
+    game
   };
 }

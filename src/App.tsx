@@ -5,21 +5,21 @@ import { getPostId } from "./utils";
 // import viteLogo from "/vite.svg";
 import "./App.css";
 import { useGame } from "./useGame";
+import { Room } from "./components/Room";
 
 function App() {
   const game = useGame();
 
   return (
     <>
-      <h1>Porodle</h1>
+    <h1>Porodle</h1>
+    <Room />
       <div className="card">
         <AnswerInput
           onTypeAnswer={game.onTypeAnswer}
           currentAnswer={game.currentAnswer}
         />
       </div>
-
-      <p className="read-the-docs"></p>
     </>
   );
 }
