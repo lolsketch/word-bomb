@@ -17,7 +17,13 @@ export function useGame() {
     room: postID,
     onMessage(event: MessageEvent<string>) {
       const data = parseUpdate(event.data);
-      setTyping(data.value);
+      switch (data.action) {
+        case "typing":
+          setTyping(data.value);
+          break;
+        case "game":
+          console.log("Game update:", data.value);
+      }
     },
   });
 

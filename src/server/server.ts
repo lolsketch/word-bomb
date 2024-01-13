@@ -1,5 +1,5 @@
 import type * as Party from "partykit/server";
-import { createUpdate, parseAction } from "./types";
+import { createUpdate, parseAction, type GameState } from "./types";
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
@@ -11,9 +11,35 @@ export default class Server implements Party.Server {
     this.typing = (await this.room.storage.get<string>("typing")) ?? "";
   }
 
-  onConnect(connection: Party.Connection) {
+  async onConnect(connection: Party.Connection) {
     // For all WebSocket connections, send the current count
     connection.send(createUpdate({ action: "typing", value: this.typing }));
+
+    let game = await this.room.storage.get<GameState>("game");
+    if (!game) {
+      game = {
+        id: this.room.id,
+        players: {}
+      }
+    }
+
+    const player = game.players[connection.id];
+    if (!player) {
+      const newPlayer = {
+        id: connection.id,
+        lives: 3,
+        name: "Poro"
+      }
+      game.players[connection.id] = newPlayer;
+      await this.room.storage.put("game", game);
+    }
+
+    this.room.broadcast(
+      createUpdate({
+        action: "game",
+        value: game,
+      })
+    );
   }
 
   onMessage(message: string, _sender: Party.Connection) {
