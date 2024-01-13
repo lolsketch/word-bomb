@@ -1,6 +1,6 @@
 # PartyKit + React + Vite
 
-### Demo: https://partykit-vite-react.slavikdenis.partykit.dev
+### Demo: https://word-dash.devonpmack.partykit.dev
 
 Welcome to the party, pal!
 
