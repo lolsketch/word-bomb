@@ -5,19 +5,15 @@ export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
   constructor(readonly room: Party.Room) {}
   typing: string = "";
-  game: GameState = { id: "", players: {} };
+  game: GameState = { id: "", players: {}, currentTurn: null };
 
   async onStart() {
-    // Load counter from storage on startup
     this.typing = (await this.room.storage.get<string>("typing")) ?? "";
-    this.game = (await this.room.storage.get<GameState>("game")) ?? {
-      id: "",
-      players: {},
-    };
+    this.game = (await this.room.storage.get<GameState>("game")) ?? this.game;
   }
 
   async onConnect(connection: Party.Connection) {
-    // For all WebSocket connections, send the current count
+    console.log("Connection opened", connection.id);
     connection.send(createUpdate({ action: "typing", value: this.typing }));
 
     const player = this.game.players[connection.id];
@@ -40,8 +36,6 @@ export default class Server implements Party.Server {
   }
 
   onMessage(message: string, _sender: Party.Connection) {
-    // For all WebSocket messages, parse the message and update the count
-
     const parsed = parseAction(message);
 
     switch (parsed.action) {
@@ -60,7 +54,6 @@ export default class Server implements Party.Server {
 
   async onClose(connection: Party.Connection) {
     console.log("Connection closed", connection.id);
-    // When a WebSocket connection disconnects, remove it from the count
 
     delete this.game.players[connection.id];
     await this.room.storage.put("game", this.game);

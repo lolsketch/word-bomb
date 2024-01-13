@@ -1,6 +1,8 @@
 export type Action = { action: "type"; value: string };
 
-export type Update = { action: "typing"; value: string } | {action: "game"; value: GameState};
+export type Update =
+  | { action: "typing"; value: string }
+  | { action: "game"; value: GameState };
 
 export interface PlayerState {
   id: string;
@@ -10,7 +12,8 @@ export interface PlayerState {
 
 export interface GameState {
   id: string;
-  players: {[id: string]: PlayerState};
+  players: { [id: string]: PlayerState };
+  currentTurn: string | null;
 }
 
 export function createAction(action: Action): string {
