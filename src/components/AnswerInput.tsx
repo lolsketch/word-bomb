@@ -7,21 +7,7 @@ interface Props {
   game: Game;
 }
 
-export const AnswerInput = ({ onTypeAnswer, currentAnswer, game }: Props) => {
-  if (game.myTurn) {
-    return (
-      <EnabledAnswerInput
-        game={game}
-        onTypeAnswer={onTypeAnswer}
-        currentAnswer={currentAnswer}
-      />
-    );
-  } else {
-    return <DisabledAnswerInput currentAnswer={currentAnswer} />;
-  }
-};
-
-function EnabledAnswerInput({ onTypeAnswer, game }: Props) {
+export function EnabledAnswerInput({ onTypeAnswer, game }: Props) {
   const [localAnswer, setLocalAnswer] = useState("");
 
   const ref = useRef<HTMLInputElement>(null);
@@ -52,7 +38,9 @@ function EnabledAnswerInput({ onTypeAnswer, game }: Props) {
   );
 }
 
-function DisabledAnswerInput({ currentAnswer }: Pick<Props, "currentAnswer">) {
+export function DisabledAnswerInput({
+  currentAnswer,
+}: Pick<Props, "currentAnswer">) {
   return (
     <div>
       <input className={css.input} disabled value={currentAnswer}></input>

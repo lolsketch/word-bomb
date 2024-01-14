@@ -8,14 +8,16 @@ import { MAX_LIVES } from "../../../../server/data/constants";
 import s from "./Player.module.css";
 import { useEffect, useRef } from "react";
 import { usePrevious } from "@uidotdev/usehooks";
+import { DisabledAnswerInput } from "../../../AnswerInput";
 
 interface Props {
   player: PlayerState;
   playersTurn: boolean;
   css: any;
+  typing: string;
 }
 
-export const Player = ({ player, playersTurn, css }: Props) => {
+export const Player = ({ player, playersTurn, css, typing }: Props) => {
   const getAvatar = () => {
     if (player.lives <= 0) {
       return poroGhostImg;
@@ -33,7 +35,6 @@ export const Player = ({ player, playersTurn, css }: Props) => {
     if (prev === player.shake || player.shake === 0) {
       return;
     }
-    console.log("reset animation");
 
     ref.current!.style.animation = "none";
     ref.current!.offsetHeight; /* trigger reflow */
@@ -54,6 +55,7 @@ export const Player = ({ player, playersTurn, css }: Props) => {
           "deg)",
       }}
     >
+      <DisabledAnswerInput currentAnswer={typing} />
       <div ref={ref} className={player.shake > 0 ? s.shake : ""}>
         <div>
           <img src={getAvatar()} className="avatar" />
@@ -64,7 +66,7 @@ export const Player = ({ player, playersTurn, css }: Props) => {
             return <img key={index} width="20px" src={img} />;
           })}
         </div>
-        {player.id}
+        {player.id}D
       </div>
     </div>
   );

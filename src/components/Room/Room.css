@@ -1,7 +1,7 @@
 .avatar {
   vertical-align: middle;
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
 }
 
@@ -14,11 +14,11 @@
 }
 .container-item {
   position: absolute;
-  left: calc(50% - 100px);
+  left: calc(50% - 125px);
   top: calc(25%);
 }
 
 .player {
   position: absolute;
-  width: 200px;
+  width: 250px;
 }

@@ -78,6 +78,7 @@ export const Room = ({ game, playerId }: Props) => {
         {players.map(([id, playerState], index) => {
           return (
             <Player
+              typing={game.currentTurn === id ? game.typing : ""}
               key={id}
               player={playerState}
               playersTurn={game.currentTurn === id}
