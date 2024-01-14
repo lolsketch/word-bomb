@@ -39,6 +39,9 @@ function EnabledAnswerInput({ onTypeAnswer, game }: Props) {
       <input
         className={css.input}
         ref={ref}
+        onBlur={() => {
+          ref.current?.focus();
+        }}
         onChange={(e) => {
           setLocalAnswer(e.target.value);
           onTypeAnswer(e.target.value);
