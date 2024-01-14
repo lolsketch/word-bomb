@@ -66,7 +66,7 @@ export const Player = ({ player, playersTurn, css, typing }: Props) => {
             return <img key={index} width="20px" src={img} />;
           })}
         </div>
-        {player.id}D
+        {player.id}
       </div>
     </div>
   );
