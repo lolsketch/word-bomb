@@ -1,5 +1,6 @@
 import type { PlayerState } from "../../../../server/types";
 import poroImg from "./images/poro.jpeg";
+import poroGhostImg from "./images/ghost-poro.png";
 import snaxImg from "./images/snax.png";
 import emptyHeartImg from "./images/heart-empty.png";
 import fullHeartImg from "./images/heart-full.png";
@@ -12,11 +13,15 @@ interface Props {
 
 const MAX_LIVES = 3;
 export const Player = ({ player, playersTurn, css }: Props) => {
-  const avatar = playersTurn ? (
-    <img src={poroImg} alt="poro" className="avatar" />
-  ) : (
-    <img src={snaxImg} alt="snax" className="avatar" />
-  );
+  const getAvatar = () => {
+    if (player.lives === 0) {
+      return poroGhostImg;
+    }
+    if (playersTurn) {
+      return poroImg;
+    }
+    return snaxImg;
+  };
   const lives = [...Array(MAX_LIVES)].fill(true, MAX_LIVES - player.lives);
 
   return (
@@ -33,7 +38,9 @@ export const Player = ({ player, playersTurn, css }: Props) => {
           "deg)",
       }}
     >
-      <div>{avatar}</div>
+      <div>
+        <img src={getAvatar()} className="avatar" />
+      </div>
       <div>
         {lives.map((value, index) => {
           const img = value ? fullHeartImg : emptyHeartImg;
