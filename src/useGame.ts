@@ -51,8 +51,8 @@ export function useGame() {
     start() {
       send({ action: "start" });
     },
-    myID: socket.id,
     game,
+    myTurn: game?.currentTurn === socket.id,
   };
 }
 

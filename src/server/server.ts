@@ -49,9 +49,9 @@ export default class Server implements Party.Server {
         if (this.game.question?.answer.includes(guess)) {
           console.log("Correct guess!");
           pickQuestion(this.game);
+          clearTimeout(this.game.timer!);
           nextTurn(this.game, () => this.sync());
           this.game.typing = "";
-          clearTimeout(this.game.timer!);
         }
         break;
       case "start":
