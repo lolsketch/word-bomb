@@ -7,6 +7,7 @@ import {
   createAction,
   type GameState,
 } from "./server/types";
+import { username } from "./main";
 
 // In case of custom setup, change this to your server's host
 const host = import.meta.env.PROD
@@ -20,6 +21,7 @@ export function useGame() {
   const socket = usePartySocket({
     host,
     room: postID,
+    id: username,
     onMessage(event: MessageEvent<string>) {
       const data = parseUpdate(event.data);
       switch (data.action) {
