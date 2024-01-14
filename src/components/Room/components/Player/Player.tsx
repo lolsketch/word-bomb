@@ -4,6 +4,7 @@ import poroGhostImg from "./images/ghost-poro.png";
 import snaxImg from "./images/snax.png";
 import emptyHeartImg from "./images/heart-empty.png";
 import fullHeartImg from "./images/heart-full.png";
+import { MAX_LIVES } from "../../../../server/data/constants";
 
 interface Props {
   player: PlayerState;
@@ -11,10 +12,9 @@ interface Props {
   css: any;
 }
 
-const MAX_LIVES = 3;
 export const Player = ({ player, playersTurn, css }: Props) => {
   const getAvatar = () => {
-    if (player.lives === 0) {
+    if (player.lives <= 0) {
       return poroGhostImg;
     }
     if (playersTurn) {

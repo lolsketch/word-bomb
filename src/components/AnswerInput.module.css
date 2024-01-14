@@ -3,7 +3,7 @@
   outline: none;
   background: transparent;
   font-size: 1.5rem;
-  color: #fff;
+  color: #000000;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   letter-spacing: 0.1rem;
@@ -14,7 +14,8 @@
 }
 
 .input:focus {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid rgb(0, 0, 0);
   padding: 0.5rem 0.5rem;
   background-color: #ffffff1c
 }
+
