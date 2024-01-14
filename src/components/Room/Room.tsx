@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { GameState, PlayerState } from "../../server/types";
 import "./Room.css";
 import { Player } from "./components/Player/Player";
+import { useMeasure } from "@uidotdev/usehooks";
 
 interface Props {
   game: GameState;
@@ -14,11 +15,12 @@ interface Circle {
   rotateReverse: number;
 }
 
-const buildCircle = (numPlayers: number): Circle[] => {
+const buildCircle = (numPlayers: number, radius: number): Circle[] => {
   const type = 1;
-  let radius = "220"; //distance from center
   let start = -90; //shift start from 0
   let slice = (360 * type) / numPlayers;
+
+  console.log("r", radius);
 
   let items: Circle[] = [];
   let i;
@@ -27,7 +29,7 @@ const buildCircle = (numPlayers: number): Circle[] => {
     let rotateReverse = rotate * -1;
 
     items.push({
-      radius: radius,
+      radius: String(radius),
       rotate: rotate,
       rotateReverse: rotateReverse,
     });
@@ -57,19 +59,21 @@ export const Room = ({ game, playerId }: Props) => {
     return <p>Waiting for players</p>;
   }
 
+  const [ref, { height }] = useMeasure();
+
   useEffect(() => {
     if (numPlayers > 0) {
-      const result = buildCircle(numPlayers);
+      const result = buildCircle(numPlayers, (height || 50) / 4);
       setCircle(result);
     }
-  }, [numPlayers]);
+  }, [numPlayers, height]);
 
   if (circle.length != numPlayers) {
     return;
   }
 
   return (
-    <div className="container">
+    <div className="container" ref={ref}>
       <div className="container-item">
         {players.map(([id, playerState], index) => {
           return (

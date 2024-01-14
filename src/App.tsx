@@ -13,16 +13,14 @@ function App() {
     <>
       <h1>Porodle</h1>
       <Room game={game.game} playerId={game.playerId} />
-      <div className="card">
+      <div className="center">
+        {!game.game.currentTurn && <button onClick={game.start}>Start</button>}
+        <p className="question">{game.game.question?.question}</p>
         <AnswerInput
           game={game}
           onTypeAnswer={game.onTypeAnswer}
           currentAnswer={game.currentAnswer}
         />
-      </div>
-      <div className="center">
-        {!game.game.currentTurn && <button onClick={game.start}>Start</button>}
-        <p className="question">{game.game.question?.question}</p>
       </div>
     </>
   );

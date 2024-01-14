@@ -22,6 +22,7 @@ export function checkGameOver(game: GameState) {
     // game over
     game.currentTurn = null;
     game.question = null;
+    game.typing = "";
     clearTimeout(game.timer!);
     return true;
   }
