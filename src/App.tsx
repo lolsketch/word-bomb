@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       <h1>Porodle</h1>
-      <Room game={game.game} />
+      <Room game={game.game} playerId={game.playerId} />
       <div className="card">
         <AnswerInput
           game={game}

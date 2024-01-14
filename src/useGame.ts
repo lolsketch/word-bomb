@@ -48,6 +48,7 @@ export function useGame() {
     },
     game,
     myTurn: game?.currentTurn === socket.id,
+    playerId: socket.id,
   };
 }
 

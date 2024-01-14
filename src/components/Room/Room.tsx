@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import type { GameState } from "../../server/types";
+import type { GameState, PlayerState } from "../../server/types";
 import "./Room.css";
 import { Player } from "./components/Player/Player";
 
 interface Props {
   game: GameState;
+  playerId: string;
 }
 
 interface Circle {
@@ -32,12 +33,26 @@ const buildCircle = (numPlayers: number): Circle[] => {
     });
   }
   return items;
-  // this.setState({ square: items });
 };
 
-export const Room = ({ game }: Props) => {
+const rearrangePlayers = (
+  players: [string, PlayerState][],
+  playerIndex: number
+) => {
+  const playerAndAfter = players.slice(playerIndex);
+  const playersBefore = players.slice(0, playerIndex);
+
+  return [...playerAndAfter, ...playersBefore];
+};
+
+export const Room = ({ game, playerId }: Props) => {
   const [circle, setCircle] = useState<Circle[]>([]);
+  const playerIds = Object.keys(game.players);
   const numPlayers = Object.keys(game.players).length;
+  const rawPlayers = Object.entries(game.players);
+  const playerIndex = playerIds.indexOf(playerId);
+  const players = rearrangePlayers(rawPlayers, playerIndex);
+
   if (numPlayers === 0) {
     return <p>Waiting for players</p>;
   }
@@ -56,7 +71,7 @@ export const Room = ({ game }: Props) => {
   return (
     <div className="container">
       <div className="container-item">
-        {Object.entries(game.players).map(([id, playerState], index) => {
+        {players.map(([id, playerState], index) => {
           return (
             <Player
               key={id}
