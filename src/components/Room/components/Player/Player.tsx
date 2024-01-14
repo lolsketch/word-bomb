@@ -1,35 +1,43 @@
 import type { PlayerState } from "../../../../server/types";
+import poroImg from "./images/poro.jpeg";
+import snaxImg from "./images/snax.png";
+import emptyHeartImg from "./images/heart-empty.png";
+import fullHeartImg from "./images/heart-full.png";
 
 interface Props {
   player: PlayerState;
   playersTurn: boolean;
+  css: any;
 }
 
-export const Player = ({ player, playersTurn }: Props) => {
+const MAX_LIVES = 3;
+export const Player = ({ player, playersTurn, css }: Props) => {
   const avatar = playersTurn ? (
-    <img
-      src="https://avatarfiles.alphacoders.com/867/86773.jpg"
-      alt="poro"
-      className="poro"
-    />
+    <img src={poroImg} alt="poro" className="avatar" />
   ) : (
-    <img
-      src="https://media.assettype.com/afkgaming%2F2022-03%2F32b834ac-e194-4e6b-9618-2ce38d8294c9%2Fporo_snax.jpg?auto=format%2Ccompress&dpr=1.0&format=webp&w=400"
-      alt="snax"
-      className="snax"
-    />
+    <img src={snaxImg} alt="snax" className="avatar" />
   );
+  const lives = [...Array(MAX_LIVES)].fill(true, MAX_LIVES - player.lives);
+
   return (
-    <div className="player">
-      {avatar}
+    <div
+      className="player"
+      style={{
+        transform:
+          "rotate(" +
+          css.rotate +
+          "deg) translate(" +
+          css.radius +
+          "px) rotate(" +
+          css.rotateReverse +
+          "deg)",
+      }}
+    >
+      <div>{avatar}</div>
       <div>
-        {[...Array(player.lives)].map((_) => {
-          return (
-            <img
-              width="20px"
-              src="https://cdn-icons-png.flaticon.com/512/2589/2589054.png"
-            />
-          );
+        {lives.map((value, index) => {
+          const img = value ? fullHeartImg : emptyHeartImg;
+          return <img key={index} width="20px" src={img} />;
         })}
       </div>
       Player {player.id}

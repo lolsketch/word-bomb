@@ -1,19 +1,24 @@
-.poro {
+.avatar {
   vertical-align: middle;
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
 
-.snax {
-  vertical-align: middle;
-  height: 50px;
+.container {
+  width: 450px;
+  height: 450px;
   border-radius: 50%;
+  margin: 40px auto 40px;
+  position: relative;
+}
+.container-item {
+  position: absolute;
+  left: 130px; /* calculate circle width / 2 - .square width / 2 */
+  top: 195px;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  row-gap: 50px;
-  column-gap: 20px;
+.player {
+  position: absolute;
+  width: 200px;
 }
