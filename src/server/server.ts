@@ -60,6 +60,7 @@ export default class Server implements Party.Server {
         }
         break;
       case "start":
+        if (this.game.currentTurn) return;
         startGame(this.game, () => this.sync());
         break;
     }
