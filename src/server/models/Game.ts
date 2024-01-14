@@ -13,6 +13,22 @@ export function startGame(game: GameState, sync: () => void) {
   }
 }
 
+export function checkGameOver(game: GameState) {
+  const alivePlayers = Object.keys(game.players).filter(
+    (p) => game.players[p].lives > 0
+  );
+
+  if (alivePlayers.length <= 1) {
+    // game over
+    game.currentTurn = null;
+    game.question = null;
+    clearTimeout(game.timer!);
+    return true;
+  }
+
+  return false;
+}
+
 export function nextTurn(game: GameState, sync: () => void) {
   const players = Object.keys(game.players).filter(
     (p) => game.players[p].lives > 0
@@ -20,13 +36,7 @@ export function nextTurn(game: GameState, sync: () => void) {
 
   game.typing = "";
 
-  if (players.length <= 1) {
-    // game over
-    game.currentTurn = null;
-    game.question = null;
-
-    return;
-  }
+  if (checkGameOver(game)) return;
 
   const index = players.indexOf(game.currentTurn!);
   const nextIndex = (index + 1) % players.length;
@@ -51,6 +61,8 @@ export function startTurnTimer(game: GameState, sync: () => void) {
     const player = game.players[game.currentTurn!];
     nextTurn(game, sync);
     player.lives--;
+
+    checkGameOver(game);
     sync();
   }, TIME_TO_GUESS);
 }

@@ -1,6 +1,11 @@
 import type * as Party from "partykit/server";
 import { createUpdate, parseAction, type GameState } from "./types";
-import { nextTurn, pickQuestion, startGame } from "./models/Game";
+import {
+  checkGameOver,
+  nextTurn,
+  pickQuestion,
+  startGame,
+} from "./models/Game";
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
@@ -67,6 +72,8 @@ export default class Server implements Party.Server {
 
     delete this.game.players[connection.id];
     await this.room.storage.put("game", this.game);
+
+    checkGameOver(this.game);
 
     this.room.broadcast(
       createUpdate({
