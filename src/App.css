@@ -42,3 +42,14 @@
   color: #888;
 }
 
+.center {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
+
+.question {
+  font-size: 1.5em;
+  font-weight: bold;
+}
