@@ -16,6 +16,7 @@ export interface PlayerState {
   id: string;
   name: string;
   lives: number;
+  shake: number;
 }
 
 export interface GameState {

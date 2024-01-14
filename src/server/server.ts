@@ -34,6 +34,7 @@ export default class Server implements Party.Server {
         lives: 0,
         name: "Poro",
         playersTurn: false,
+        shake: 0,
       };
       this.game.players[connection.id] = newPlayer;
     }
@@ -41,7 +42,7 @@ export default class Server implements Party.Server {
     this.sync();
   }
 
-  onMessage(message: string, _sender: Party.Connection) {
+  onMessage(message: string, sender: Party.Connection) {
     const parsed = parseAction(message);
 
     switch (parsed.action) {
@@ -57,6 +58,8 @@ export default class Server implements Party.Server {
           clearTimeout(this.game.timer!);
           nextTurn(this.game, () => this.sync());
           this.game.typing = "";
+        } else {
+          this.game.players[sender.id].shake++;
         }
         break;
       case "start":
