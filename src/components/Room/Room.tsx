@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { GameState, PlayerState } from "../../server/types";
+import type { PlayerState } from "../../server/types";
 import "./Room.css";
 import { Player } from "./components/Player/Player";
 import { useMeasure } from "@uidotdev/usehooks";
@@ -97,6 +97,7 @@ export const Room = ({ game, playerId }: Props) => {
         {players.map(([id, playerState], index) => {
           return (
             <Player
+              isMe={id === playerId}
               showLives={Boolean(state.currentTurn)}
               typing={state.currentTurn === id ? state.typing : ""}
               key={id}

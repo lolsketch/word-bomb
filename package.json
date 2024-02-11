@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "dev": "npm-run-all --parallel client:dev server:dev",
     "client:dev": "vite --port 5004",
-    "client:build": "tsc && vite build",
+    "client:build": "typecheck && vite build",
     "client:preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "server:dev": "rm -rf .partykit && partykit dev",
@@ -47,6 +48,6 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
-    "vite": "^4.5.2"
+    "vite": "^5.1.1"
   }
 }

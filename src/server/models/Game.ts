@@ -53,7 +53,7 @@ export function pickQuestion(game: GameState) {
   }
   const length = weightedRandom(game.difficultyWeights.length);
   const level = weightedRandom(game.difficultyWeights.level);
-  const questionSet = questions[length][level];
+  const questionSet = questions[length + 2][level];
   const question = sample(Object.keys(questionSet))!;
 
   game.question = {
@@ -82,7 +82,7 @@ function incrementWeights(game: GameState) {
       game.difficultyWeights.level[i] / 10
     );
     game.difficultyWeights.level[i] = Math.floor(
-      game.difficultyWeights.level[i] * 9 / 10
+      (game.difficultyWeights.level[i] * 9) / 10
     );
   }
 
@@ -91,9 +91,8 @@ function incrementWeights(game: GameState) {
     game.difficultyWeights.length[0] / 10
   );
   game.difficultyWeights.length[0] = Math.floor(
-    game.difficultyWeights.length[0] * 9 / 10
+    (game.difficultyWeights.length[0] * 9) / 10
   );
-
 }
 
 export function startTurnTimer(game: GameState, sync: () => void) {
