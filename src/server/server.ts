@@ -6,7 +6,7 @@ import {
   pickQuestion,
   startGame,
 } from "./models/Game";
-import { MAX_GUESS_TIME } from "./data/constants";
+import { MAX_GUESS_TIME, STARTING_WEIGHTS } from "./data/constants";
 import { answers } from "./data/levels_lol";
 
 export default class Server implements Party.Server {
@@ -22,10 +22,7 @@ export default class Server implements Party.Server {
     messages: [],
     usedWords: [],
     timerDuration: MAX_GUESS_TIME,
-    difficultyWeights: {
-      length: [100, 0],
-      level: [100, 0, 0, 0, 0],
-    },
+    difficultyWeights: { ...STARTING_WEIGHTS },
   };
 
   async onStart() {
@@ -62,10 +59,9 @@ export default class Server implements Party.Server {
         const guess = parsed.value;
 
         if (this.game.usedWords.includes(guess)) {
-          this.game.players[sender.id].shake++; 
+          this.game.players[sender.id].shake++;
           // todo: make it obvious that word has been used
-        }
-        else if (
+        } else if (
           guess.includes(this.game.question?.question || "err") &&
           answers.has(guess)
         ) {
