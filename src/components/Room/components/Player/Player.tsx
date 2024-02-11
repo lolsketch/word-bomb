@@ -18,6 +18,7 @@ interface Props {
   css: any;
   typing: string;
   showLives: boolean;
+  isMe: boolean;
 }
 
 export const Player = ({
@@ -26,6 +27,7 @@ export const Player = ({
   css,
   typing,
   showLives,
+  isMe,
 }: Props) => {
   const getAvatar = () => {
     if (player.lives > 0 && !showLives) {
@@ -98,7 +100,9 @@ export const Player = ({
             })}
           </div>
         )}
-        <div>{player.id}</div>
+        <div>
+          {player.id} {isMe && "(you)"}
+        </div>
       </div>
     </div>
   );
