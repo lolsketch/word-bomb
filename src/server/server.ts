@@ -17,6 +17,7 @@ export default class Server implements Party.Server {
     currentTurn: null,
     question: null,
     timer: null,
+    usedWords: [],
   };
 
   async onStart() {
@@ -52,12 +53,13 @@ export default class Server implements Party.Server {
       case "guess":
         const guess = parsed.value;
 
-        if (this.game.question?.answer.includes(guess)) {
+        if (this.game.question?.answer.includes(guess) && !this.game.usedWords.includes(guess)) {
           console.log("Correct guess!");
           pickQuestion(this.game);
           clearTimeout(this.game.timer!);
           nextTurn(this.game, () => this.sync());
           this.game.typing = "";
+          this.game.usedWords.push(guess);
         } else {
           this.game.players[sender.id].shake++;
         }

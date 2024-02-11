@@ -26,6 +26,7 @@ export interface GameState {
   question: { question: string; answer: string[] } | null;
   typing: string;
   timer: ReturnType<typeof setTimeout> | null;
+  usedWords: string[];
 }
 
 export function createAction(action: Action): string {
