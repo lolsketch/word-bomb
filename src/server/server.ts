@@ -60,28 +60,11 @@ export default class Server implements Party.Server {
         break;
       case "guess":
         const guess = parsed.value;
-
-        if (this.game.usedWords.includes(guess)) {
-          this.game.players[sender.id].shake++; 
-          // todo: make it obvious that word has been used
-        }
-        else if (
-          guess.includes(this.game.question?.question || "err") &&
-          answers.has(guess)
-        ) {
-          console.log("Correct guess!");
-          pickQuestion(this.game);
-          clearTimeout(this.game.timer!);
-          nextTurn(this.game, () => this.sync());
-          this.game.typing = "";
-          this.game.usedWords.push(guess);
-        } else {
-          this.game.players[sender.id].shake++;
-        }
+        this.submitGuess(guess, sender.id);
         break;
       case "start":
         if (this.game.currentTurn) return;
-        startGame(this.game, () => this.sync());
+        startGame(this.game, this.submitGuess, () => this.sync());
         break;
       case "message":
         this.game.messages.push(`${sender.id}: ${parsed.value!}`);
@@ -105,6 +88,29 @@ export default class Server implements Party.Server {
         value: this.game,
       })
     );
+  }
+
+  private submitGuess(guess: string, player: string): boolean {
+    if (this.game.usedWords.includes(guess)) {
+      this.game.players[player].shake++; 
+      return false;
+      // todo: make it obvious that word has been used
+    }
+    else if (
+      guess.includes(this.game.question?.question || "err") &&
+      answers.has(guess)
+    ) {
+      console.log("Correct guess!");
+      pickQuestion(this.game);
+      clearTimeout(this.game.timer!);
+      nextTurn(this.game, this.submitGuess, () => this.sync());
+      this.game.typing = "";
+      this.game.usedWords.push(guess);
+      return true
+    } else {
+      this.game.players[player].shake++;
+      return false;
+    }
   }
 
   private async sync() {

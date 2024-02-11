@@ -3,10 +3,10 @@ import { questions } from "../data/levels_lol";
 import { type GameState } from "../types";
 import { sample } from "lodash";
 
-export function startGame(game: GameState, sync: () => void) {
+export function startGame(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
   game.currentTurn = sample(Object.keys(game.players))!;
   pickQuestion(game);
-  startTurnTimer(game, sync);
+  startTurnTimer(game, submitGuess, sync);
 
   for (const player of Object.values(game.players)) {
     player.lives = MAX_LIVES;
@@ -30,7 +30,7 @@ export function checkGameOver(game: GameState) {
   return false;
 }
 
-export function nextTurn(game: GameState, sync: () => void) {
+export function nextTurn(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
   const players = Object.keys(game.players).filter(
     (p) => game.players[p].lives > 0
   );
@@ -43,7 +43,7 @@ export function nextTurn(game: GameState, sync: () => void) {
   const nextIndex = (index + 1) % players.length;
   game.currentTurn = players[nextIndex];
 
-  startTurnTimer(game, sync);
+  startTurnTimer(game, submitGuess, sync);
 }
 
 export function pickQuestion(game: GameState) {
@@ -94,14 +94,18 @@ function incrementWeights(game: GameState) {
   );
 }
 
-export function startTurnTimer(game: GameState, sync: () => void) {
+export function startTurnTimer(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
   game.timerDuration = Math.max(MIN_GUESS_TIME, game.timerDuration * 0.95);
   game.timer = setTimeout(() => {
     const player = game.players[game.currentTurn!];
-    nextTurn(game, sync);
-    player.lives--;
+    const guess = game.typing;
 
-    checkGameOver(game);
+    if (!submitGuess(guess, game.currentTurn!)) {
+      player.lives--;
+      checkGameOver(game);
+      nextTurn(game, submitGuess, sync);
+    }
+ 
     sync();
   }, game.timerDuration);
 }
