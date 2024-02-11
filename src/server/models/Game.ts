@@ -101,21 +101,17 @@ function weightedRandom(weights: number[]) {
 function incrementWeights(game: GameState) {
   // Shift the level weights over by 10% each round
   for (let i = 0; i < NUM_LEVELS - 1; i++) {
-    game.difficultyWeights.level[i + 1] += Math.floor(
-      game.difficultyWeights.level[i] * DIFFICULTY_SCALING_FACTOR
-    );
-    game.difficultyWeights.level[i] = Math.floor(
-      game.difficultyWeights.level[i] * (1 - DIFFICULTY_SCALING_FACTOR)
-    );
+    game.difficultyWeights.level[i + 1] +=
+      game.difficultyWeights.level[i] * DIFFICULTY_SCALING_FACTOR;
+    game.difficultyWeights.level[i] =
+      game.difficultyWeights.level[i] * (1 - DIFFICULTY_SCALING_FACTOR);
   }
 
   // Shift the length weights over by 10% each round
-  game.difficultyWeights.length[1] += Math.floor(
-    game.difficultyWeights.length[0] * DIFFICULTY_SCALING_FACTOR
-  );
-  game.difficultyWeights.length[0] = Math.floor(
-    game.difficultyWeights.length[0] * (1 - DIFFICULTY_SCALING_FACTOR)
-  );
+  game.difficultyWeights.length[0] =
+    game.difficultyWeights.length[0] * (1 - DIFFICULTY_SCALING_FACTOR);
+  game.difficultyWeights.length[1] +=
+    game.difficultyWeights.length[0] * DIFFICULTY_SCALING_FACTOR;
 }
 
 export function startTurnTimer(
