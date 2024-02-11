@@ -5,7 +5,7 @@ import victoryPoro from "./images/victory-poro.png";
 import snaxImg from "./images/snax.png";
 import emptyHeartImg from "./images/heart-empty.png";
 import fullHeartImg from "./images/heart-full.png";
-import { MAX_LIVES, MAX_GUESS_TIME } from "../../../../server/data/constants";
+import { MAX_LIVES } from "../../../../server/data/constants";
 import s from "./Player.module.css";
 import { useEffect, useRef } from "react";
 import { usePrevious } from "@uidotdev/usehooks";
