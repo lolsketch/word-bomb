@@ -72,7 +72,7 @@ export const Player = ({
 
   return (
     <div
-      className={"player"}
+      className={"player flex flex-col items-center justify-center"}
       style={{
         transform:
           "rotate(" +
@@ -91,7 +91,7 @@ export const Player = ({
       >
         {avatar}
         {showLives && (
-          <div>
+          <div className="flex space-x-1 justify-center">
             {lives.map((value, index) => {
               const img = value ? fullHeartImg : emptyHeartImg;
               return <img key={index} width="20px" src={img} />;

@@ -3,9 +3,11 @@ import type { GameState, PlayerState } from "../../server/types";
 import "./Room.css";
 import { Player } from "./components/Player/Player";
 import { useMeasure } from "@uidotdev/usehooks";
+import type { Game } from "../../useGame";
+import { EnabledAnswerInput } from "../AnswerInput";
 
 interface Props {
-  game: GameState;
+  game: Game;
   playerId: string;
 }
 
@@ -49,9 +51,15 @@ const rearrangePlayers = (
 
 export const Room = ({ game, playerId }: Props) => {
   const [circle, setCircle] = useState<Circle[]>([]);
-  const playerIds = Object.keys(game.players);
-  const numPlayers = Object.keys(game.players).length;
-  const rawPlayers = Object.entries(game.players);
+
+  if (!game.game) {
+    return <p>Game not found</p>;
+  }
+  const state = game.game;
+
+  const playerIds = Object.keys(state.players);
+  const numPlayers = Object.keys(state.players).length;
+  const rawPlayers = Object.entries(state.players);
   const playerIndex = playerIds.indexOf(playerId);
   const players = rearrangePlayers(rawPlayers, playerIndex);
 
@@ -73,16 +81,27 @@ export const Room = ({ game, playerId }: Props) => {
   }
 
   return (
-    <div className="container" ref={ref}>
-      <div className="container-item">
+    <div className="h-full c-container" ref={ref}>
+      <div className="center">
+        {!state.currentTurn && <button onClick={game.start}>Start</button>}
+        <p className="question">{state.question?.question}</p>
+        {game.myTurn && (
+          <EnabledAnswerInput
+            game={game}
+            onTypeAnswer={game.onTypeAnswer}
+            currentAnswer={game.currentAnswer}
+          />
+        )}
+      </div>
+      <div className="c-container-item">
         {players.map(([id, playerState], index) => {
           return (
             <Player
-              showLives={Boolean(game.currentTurn)}
-              typing={game.currentTurn === id ? game.typing : ""}
+              showLives={Boolean(state.currentTurn)}
+              typing={state.currentTurn === id ? state.typing : ""}
               key={id}
               player={playerState}
-              playersTurn={game.currentTurn === id}
+              playersTurn={state.currentTurn === id}
               css={circle[index]}
             />
           );

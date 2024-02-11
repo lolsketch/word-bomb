@@ -18,6 +18,7 @@ export default class Server implements Party.Server {
     currentTurn: null,
     question: null,
     timer: null,
+    messages: [],
     usedWords: [],
     timerDuration: TIME_TO_GUESS,
     difficultyWeights: {
@@ -59,7 +60,10 @@ export default class Server implements Party.Server {
       case "guess":
         const guess = parsed.value;
 
-        if (this.game.question?.answer.includes(guess) && !this.game.usedWords.includes(guess)) {
+        if (
+          this.game.question?.answer.includes(guess) &&
+          !this.game.usedWords.includes(guess)
+        ) {
           console.log("Correct guess!");
           pickQuestion(this.game);
           clearTimeout(this.game.timer!);
@@ -73,6 +77,9 @@ export default class Server implements Party.Server {
       case "start":
         if (this.game.currentTurn) return;
         startGame(this.game, () => this.sync());
+        break;
+      case "message":
+        this.game.messages.push(`${sender.id}: ${parsed.value!}`);
         break;
     }
 
