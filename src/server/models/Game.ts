@@ -1,4 +1,4 @@
-import { MAX_LIVES, TIME_TO_GUESS } from "../data/constants";
+import { MAX_LIVES, MIN_GUESS_TIME, NUM_LEVELS } from "../data/constants";
 import { questions } from "../data/levels_lol";
 import { type GameState } from "../types";
 import { sample } from "lodash";
@@ -47,8 +47,13 @@ export function nextTurn(game: GameState, sync: () => void) {
 }
 
 export function pickQuestion(game: GameState) {
-  const questionSet = sample(questions)![0]!;
-
+  //todo: real solution for this
+  if (Math.random() < 0.3) {
+    incrementWeights(game);
+  }
+  const length = weightedRandom(game.difficultyWeights.length);
+  const level = weightedRandom(game.difficultyWeights.level);
+  const questionSet = questions[length][level];
   const question = sample(Object.keys(questionSet))!;
 
   game.question = {
@@ -57,7 +62,42 @@ export function pickQuestion(game: GameState) {
   };
 }
 
+function weightedRandom(weights: number[]) {
+  const total = weights.reduce((a, b) => a + b, 0);
+  const r = Math.random() * total;
+  let i = 0;
+  let sum = 0;
+  while (sum < r) {
+    sum += weights[i];
+    i++;
+  }
+  return i - 1;
+}
+
+// increases the difficulty as game progresses
+function incrementWeights(game: GameState) {
+  // Shift the level weights over by 10% each round
+  for (let i = 0; i < NUM_LEVELS - 1; i++) {
+    game.difficultyWeights.level[i + 1] += Math.floor(
+      game.difficultyWeights.level[i] / 10
+    );
+    game.difficultyWeights.level[i] = Math.floor(
+      game.difficultyWeights.level[i] * 9 / 10
+    );
+  }
+
+  // Shift the length weights over by 10% each round
+  game.difficultyWeights.length[1] += Math.floor(
+    game.difficultyWeights.length[0] / 10
+  );
+  game.difficultyWeights.length[0] = Math.floor(
+    game.difficultyWeights.length[0] * 9 / 10
+  );
+
+}
+
 export function startTurnTimer(game: GameState, sync: () => void) {
+  game.timerDuration = Math.max(MIN_GUESS_TIME, game.timerDuration * 0.95);
   game.timer = setTimeout(() => {
     const player = game.players[game.currentTurn!];
     nextTurn(game, sync);
@@ -65,5 +105,5 @@ export function startTurnTimer(game: GameState, sync: () => void) {
 
     checkGameOver(game);
     sync();
-  }, TIME_TO_GUESS);
+  }, game.timerDuration);
 }

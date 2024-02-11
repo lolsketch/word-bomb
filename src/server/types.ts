@@ -27,6 +27,8 @@ export interface GameState {
   typing: string;
   timer: ReturnType<typeof setTimeout> | null;
   usedWords: string[];
+  timerDuration: number;
+  difficultyWeights: { length: number[], level: number[]};
 }
 
 export function createAction(action: Action): string {

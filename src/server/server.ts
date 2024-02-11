@@ -6,6 +6,7 @@ import {
   pickQuestion,
   startGame,
 } from "./models/Game";
+import { TIME_TO_GUESS } from "./data/constants";
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
@@ -18,6 +19,11 @@ export default class Server implements Party.Server {
     question: null,
     timer: null,
     usedWords: [],
+    timerDuration: TIME_TO_GUESS,
+    difficultyWeights: {
+      length: [100, 0],
+      level: [100, 0, 0, 0, 0]
+    },
   };
 
   async onStart() {
