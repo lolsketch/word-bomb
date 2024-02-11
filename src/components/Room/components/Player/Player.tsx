@@ -1,10 +1,11 @@
 import type { PlayerState } from "../../../../server/types";
 import poroImg from "./images/poro.jpeg";
 import poroGhostImg from "./images/ghost-poro.png";
+import victoryPoro from "./images/victory-poro.png";
 import snaxImg from "./images/snax.png";
 import emptyHeartImg from "./images/heart-empty.png";
 import fullHeartImg from "./images/heart-full.png";
-import { MAX_LIVES } from "../../../../server/data/constants";
+import { MAX_LIVES, TIME_TO_GUESS } from "../../../../server/data/constants";
 import s from "./Player.module.css";
 import { useEffect, useRef } from "react";
 import { usePrevious } from "@uidotdev/usehooks";
@@ -16,10 +17,21 @@ interface Props {
   playersTurn: boolean;
   css: any;
   typing: string;
+  showLives: boolean;
 }
 
-export const Player = ({ player, playersTurn, css, typing }: Props) => {
+export const Player = ({
+  player,
+  playersTurn,
+  css,
+  typing,
+  showLives,
+}: Props) => {
   const getAvatar = () => {
+    if (player.lives > 0 && !showLives) {
+      return victoryPoro;
+    }
+
     if (player.lives <= 0) {
       return poroGhostImg;
     }
@@ -47,7 +59,7 @@ export const Player = ({ player, playersTurn, css, typing }: Props) => {
   const avatar = playersTurn ? (
     <CountdownCircleTimer
       isPlaying
-      duration={10}
+      duration={TIME_TO_GUESS / 1000}
       colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
       colorsTime={[10, 6, 3, 0]}
       size={105}
@@ -78,13 +90,15 @@ export const Player = ({ player, playersTurn, css, typing }: Props) => {
         className={player.shake > 0 ? s.shake + " " + s.margin : s.margin}
       >
         {avatar}
-        <div>
-          {lives.map((value, index) => {
-            const img = value ? fullHeartImg : emptyHeartImg;
-            return <img key={index} width="20px" src={img} />;
-          })}
-        </div>
-        {player.id}
+        {showLives && (
+          <div>
+            {lives.map((value, index) => {
+              const img = value ? fullHeartImg : emptyHeartImg;
+              return <img key={index} width="20px" src={img} />;
+            })}
+          </div>
+        )}
+        <div>{player.id}</div>
       </div>
     </div>
   );
