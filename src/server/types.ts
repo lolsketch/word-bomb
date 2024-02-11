@@ -4,11 +4,13 @@ export type Action =
       action: "guess";
       value: string;
     }
-  | { action: "start" };
+  | { action: "start" }
+  | { action: "message"; value: string };
 
 export type Update =
   | { action: "typing"; value: string }
-  | { action: "game"; value: GameState };
+  | { action: "game"; value: GameState }
+  | { action: "message"; value: string };
 
 export type PlayerID = string;
 
@@ -27,6 +29,7 @@ export interface GameState {
   typing: string;
   timer: ReturnType<typeof setTimeout> | null;
   usedWords: string[];
+  messages: string[];
 }
 
 export function createAction(action: Action): string {

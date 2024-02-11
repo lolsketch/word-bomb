@@ -45,6 +45,11 @@ export function useGame() {
     onGuess: (guess: string) => {
       send({ action: "guess", value: guess });
     },
+    sendMessage: (message: string) =>
+      send({
+        action: "message",
+        value: message,
+      }),
     start() {
       send({ action: "start" });
     },
