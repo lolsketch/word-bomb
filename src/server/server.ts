@@ -61,10 +61,13 @@ export default class Server implements Party.Server {
       case "guess":
         const guess = parsed.value;
 
-        if (
+        if (this.game.usedWords.includes(guess)) {
+          this.game.players[sender.id].shake++; 
+          // todo: make it obvious that word has been used
+        }
+        else if (
           guess.includes(this.game.question?.question || "err") &&
-          answers.has(guess) &&
-          !this.game.usedWords.includes(guess)
+          answers.has(guess)
         ) {
           console.log("Correct guess!");
           pickQuestion(this.game);
