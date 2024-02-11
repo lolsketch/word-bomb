@@ -16,3 +16,9 @@
   animation: shake 0.25s;
   /* animation-iteration-count: infinite; */
 }
+
+.margin {
+  & > div:first-child {
+    margin: auto;
+  }
+}

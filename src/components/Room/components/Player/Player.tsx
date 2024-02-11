@@ -9,6 +9,7 @@ import s from "./Player.module.css";
 import { useEffect, useRef } from "react";
 import { usePrevious } from "@uidotdev/usehooks";
 import { DisabledAnswerInput } from "../../../AnswerInput";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 interface Props {
   player: PlayerState;
@@ -41,6 +42,22 @@ export const Player = ({ player, playersTurn, css, typing }: Props) => {
     ref.current!.style.animation = "";
   }, [player.shake]);
 
+  const img = <img src={getAvatar()} className="avatar" />;
+
+  const avatar = playersTurn ? (
+    <CountdownCircleTimer
+      isPlaying
+      duration={10}
+      colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+      colorsTime={[10, 6, 3, 0]}
+      size={105}
+    >
+      {() => <>{img}</>}
+    </CountdownCircleTimer>
+  ) : (
+    img
+  );
+
   return (
     <div
       className={"player"}
@@ -56,10 +73,11 @@ export const Player = ({ player, playersTurn, css, typing }: Props) => {
       }}
     >
       <DisabledAnswerInput currentAnswer={typing} />
-      <div ref={ref} className={player.shake > 0 ? s.shake : ""}>
-        <div>
-          <img src={getAvatar()} className="avatar" />
-        </div>
+      <div
+        ref={ref}
+        className={player.shake > 0 ? s.shake + " " + s.margin : s.margin}
+      >
+        {avatar}
         <div>
           {lives.map((value, index) => {
             const img = value ? fullHeartImg : emptyHeartImg;
