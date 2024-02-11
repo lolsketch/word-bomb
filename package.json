@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "dev": "npm-run-all --parallel client:dev server:dev",
     "client:dev": "vite --port 5004",
-    "client:build": "tsc && vite build",
+    "client:build": "typecheck && vite build",
     "client:preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "server:dev": "rm -rf .partykit && partykit dev",

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { GameState, PlayerState } from "../../server/types";
+import type { PlayerState } from "../../server/types";
 import "./Room.css";
 import { Player } from "./components/Player/Player";
 import { useMeasure } from "@uidotdev/usehooks";
