@@ -9,4 +9,5 @@ export const STARTING_WEIGHTS = {
 };
 
 export const DIFFICULTY_SCALING_FACTOR = 0.1;
+export const LENGTH_SCALING_FACTOR = 0.05;
 export const TIME_DECREASE_FACTOR = 0.95;

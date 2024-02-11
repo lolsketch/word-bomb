@@ -6,6 +6,7 @@ import {
   STARTING_WEIGHTS,
   DIFFICULTY_SCALING_FACTOR,
   TIME_DECREASE_FACTOR,
+  LENGTH_SCALING_FACTOR,
 } from "../data/constants";
 import { questions } from "../data/levels_lol";
 import { type GameState } from "../types";
@@ -101,17 +102,17 @@ function weightedRandom(weights: number[]) {
 function incrementWeights(game: GameState) {
   // Shift the level weights over by 10% each round
   for (let i = 0; i < NUM_LEVELS - 1; i++) {
-    game.difficultyWeights.level[i + 1] +=
+    const levelShift =
       game.difficultyWeights.level[i] * DIFFICULTY_SCALING_FACTOR;
-    game.difficultyWeights.level[i] =
-      game.difficultyWeights.level[i] * (1 - DIFFICULTY_SCALING_FACTOR);
+
+    game.difficultyWeights.level[i + 1] += levelShift;
+    game.difficultyWeights.level[i] -= levelShift;
   }
 
   // Shift the length weights over by 10% each round
-  game.difficultyWeights.length[0] =
-    game.difficultyWeights.length[0] * (1 - DIFFICULTY_SCALING_FACTOR);
-  game.difficultyWeights.length[1] +=
-    game.difficultyWeights.length[0] * DIFFICULTY_SCALING_FACTOR;
+  const lengthShift = game.difficultyWeights.length[0] * LENGTH_SCALING_FACTOR;
+  game.difficultyWeights.length[0] -= lengthShift;
+  game.difficultyWeights.length[1] += lengthShift;
 }
 
 export function startTurnTimer(
