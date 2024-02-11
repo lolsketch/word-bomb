@@ -5,7 +5,7 @@ import victoryPoro from "./images/victory-poro.png";
 import snaxImg from "./images/snax.png";
 import emptyHeartImg from "./images/heart-empty.png";
 import fullHeartImg from "./images/heart-full.png";
-import { MAX_LIVES, TIME_TO_GUESS } from "../../../../server/data/constants";
+import { MAX_LIVES, MAX_GUESS_TIME } from "../../../../server/data/constants";
 import s from "./Player.module.css";
 import { useEffect, useRef } from "react";
 import { usePrevious } from "@uidotdev/usehooks";
@@ -19,6 +19,7 @@ interface Props {
   typing: string;
   showLives: boolean;
   isMe: boolean;
+  time: number;
 }
 
 export const Player = ({
@@ -28,6 +29,7 @@ export const Player = ({
   typing,
   showLives,
   isMe,
+  time,
 }: Props) => {
   const getAvatar = () => {
     if (player.lives > 0 && !showLives) {
@@ -61,9 +63,9 @@ export const Player = ({
   const avatar = playersTurn ? (
     <CountdownCircleTimer
       isPlaying
-      duration={TIME_TO_GUESS / 1000}
+      duration={time / 1000}
       colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-      colorsTime={[10, 6, 3, 0]}
+      colorsTime={[10, 3, 1, 0]}
       size={105}
     >
       {() => <>{img}</>}

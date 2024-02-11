@@ -6,7 +6,7 @@ import {
   pickQuestion,
   startGame,
 } from "./models/Game";
-import { TIME_TO_GUESS } from "./data/constants";
+import { MAX_GUESS_TIME } from "./data/constants";
 import { answers } from "./data/levels_lol";
 
 export default class Server implements Party.Server {
@@ -21,7 +21,7 @@ export default class Server implements Party.Server {
     timer: null,
     messages: [],
     usedWords: [],
-    timerDuration: TIME_TO_GUESS,
+    timerDuration: MAX_GUESS_TIME,
     difficultyWeights: {
       length: [100, 0],
       level: [100, 0, 0, 0, 0],

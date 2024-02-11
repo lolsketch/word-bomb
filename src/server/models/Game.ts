@@ -1,10 +1,16 @@
-import { MAX_LIVES, MIN_GUESS_TIME, NUM_LEVELS } from "../data/constants";
+import {
+  MAX_LIVES,
+  MIN_GUESS_TIME,
+  NUM_LEVELS,
+  MAX_GUESS_TIME,
+} from "../data/constants";
 import { questions } from "../data/levels_lol";
 import { type GameState } from "../types";
 import { sample } from "lodash";
 
 export function startGame(game: GameState, sync: () => void) {
   game.currentTurn = sample(Object.keys(game.players))!;
+  game.timerDuration = MAX_GUESS_TIME;
   pickQuestion(game);
   startTurnTimer(game, sync);
 
@@ -99,6 +105,7 @@ export function startTurnTimer(game: GameState, sync: () => void) {
   game.timer = setTimeout(() => {
     const player = game.players[game.currentTurn!];
     nextTurn(game, sync);
+    game.timerDuration = MAX_GUESS_TIME;
     player.lives--;
 
     checkGameOver(game);
