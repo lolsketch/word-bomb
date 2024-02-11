@@ -53,6 +53,7 @@ export default class Server implements Party.Server {
 
     switch (parsed.action) {
       case "type":
+        if (this.game.currentTurn !== sender.id) return;
         this.game.typing = parsed.value!;
         break;
       case "guess":

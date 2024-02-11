@@ -64,8 +64,8 @@ export const Player = ({
     <CountdownCircleTimer
       isPlaying
       duration={time / 1000}
-      colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-      colorsTime={[10, 3, 1, 0]}
+      colors={["#7cc75e", "#7cc75e", "#F7B801", "#FF0000"]}
+      colorsTime={[10, 5, 2, 0]}
       size={105}
     >
       {() => <>{img}</>}
