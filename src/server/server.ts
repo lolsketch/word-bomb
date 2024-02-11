@@ -41,6 +41,7 @@ export default class Server implements Party.Server {
         name: "Poro",
         playersTurn: false,
         shake: 0,
+        hasGreyHealth: false,
       };
       this.game.players[connection.id] = newPlayer;
     }
@@ -90,22 +91,29 @@ export default class Server implements Party.Server {
 
   private submitGuess(guess: string, player: string): boolean {
     if (this.game.usedWords.includes(guess)) {
-      this.game.players[player].shake++; 
+      this.game.players[player].shake++;
       return false;
       // todo: make it obvious that word has been used
-    }
-    else if (
+    } else if (
       guess.includes(this.game.question?.question || "err") &&
       answers.has(guess)
     ) {
       console.log("Correct guess!");
+      for (const player of Object.values(this.game.players)) {
+        if (player.hasGreyHealth) {
+          player.hasGreyHealth = false;
+          player.lives--;
+          checkGameOver(this.game);
+        }
+      }
       pickQuestion(this.game);
       clearTimeout(this.game.timer!);
       this.game.timerDuration = MAX_GUESS_TIME;
       nextTurn(this.game, this.submitGuess.bind(this), () => this.sync());
       this.game.typing = "";
       this.game.usedWords.push(guess);
-      return true
+
+      return true;
     } else {
       this.game.players[player].shake++;
       return false;

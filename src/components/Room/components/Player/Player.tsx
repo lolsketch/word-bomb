@@ -4,6 +4,8 @@ import poroGhostImg from "./images/ghost-poro.png";
 import victoryPoro from "./images/victory-poro.png";
 import snaxImg from "./images/snax.png";
 import emptyHeartImg from "./images/heart-empty.png";
+import greyHeart from "./images/heart-grey.png";
+
 import fullHeartImg from "./images/heart-full.png";
 import { MAX_LIVES } from "../../../../server/data/constants";
 import s from "./Player.module.css";
@@ -97,6 +99,10 @@ export const Player = ({
         {showLives && (
           <div className="flex space-x-1 justify-center">
             {lives.map((value, index) => {
+              if (player.hasGreyHealth && index === MAX_LIVES - player.lives) {
+                return <img key={index} width="20px" src={greyHeart} />;
+              }
+
               const img = value ? fullHeartImg : emptyHeartImg;
               return <img key={index} width="20px" src={img} />;
             })}

@@ -18,6 +18,7 @@ export interface PlayerState {
   id: string;
   name: string;
   lives: number;
+  hasGreyHealth: boolean;
   shake: number;
 }
 

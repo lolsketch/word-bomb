@@ -11,7 +11,11 @@ import { questions } from "../data/levels_lol";
 import { type GameState } from "../types";
 import { sample } from "lodash";
 
-export function startGame(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
+export function startGame(
+  game: GameState,
+  submitGuess: (guess: string, player: string) => boolean,
+  sync: () => void
+) {
   game.currentTurn = sample(Object.keys(game.players))!;
   game.timerDuration = MAX_GUESS_TIME;
   pickQuestion(game);
@@ -40,7 +44,11 @@ export function checkGameOver(game: GameState) {
   return false;
 }
 
-export function nextTurn(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
+export function nextTurn(
+  game: GameState,
+  submitGuess: (guess: string, player: string) => boolean,
+  sync: () => void
+) {
   const players = Object.keys(game.players).filter(
     (p) => game.players[p].lives > 0
   );
@@ -52,6 +60,14 @@ export function nextTurn(game: GameState, submitGuess: (guess: string, player: s
   const index = players.indexOf(game.currentTurn!);
   const nextIndex = (index + 1) % players.length;
   game.currentTurn = players[nextIndex];
+
+  if (game.players[game.currentTurn].hasGreyHealth) {
+    for (const player of Object.values(game.players)) {
+      player.hasGreyHealth = false;
+    }
+
+    pickQuestion(game);
+  }
 
   startTurnTimer(game, submitGuess, sync);
 }
@@ -102,18 +118,25 @@ function incrementWeights(game: GameState) {
   );
 }
 
-export function startTurnTimer(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
-  game.timerDuration = Math.max(MIN_GUESS_TIME, game.timerDuration * TIME_DECREASE_FACTOR);
+export function startTurnTimer(
+  game: GameState,
+  submitGuess: (guess: string, player: string) => boolean,
+  sync: () => void
+) {
+  game.timerDuration = Math.max(
+    MIN_GUESS_TIME,
+    game.timerDuration * TIME_DECREASE_FACTOR
+  );
   game.timer = setTimeout(() => {
     const player = game.players[game.currentTurn!];
     const guess = game.typing;
 
     if (!submitGuess(guess, game.currentTurn!)) {
-      player.lives--;
+      player.hasGreyHealth = true;
       checkGameOver(game);
       nextTurn(game, submitGuess, sync);
     }
- 
+
     sync();
   }, game.timerDuration);
 }
