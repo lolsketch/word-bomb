@@ -6,7 +6,7 @@ import {
   pickQuestion,
   startGame,
 } from "./models/Game";
-import { TIME_TO_GUESS } from "./data/constants";
+import { MAX_GUESS_TIME, STARTING_WEIGHTS } from "./data/constants";
 import { answers } from "./data/levels_lol";
 
 export default class Server implements Party.Server {
@@ -21,11 +21,8 @@ export default class Server implements Party.Server {
     timer: null,
     messages: [],
     usedWords: [],
-    timerDuration: TIME_TO_GUESS,
-    difficultyWeights: {
-      length: [100, 0],
-      level: [100, 0, 0, 0, 0],
-    },
+    timerDuration: MAX_GUESS_TIME,
+    difficultyWeights: { ...STARTING_WEIGHTS },
   };
 
   async onStart() {
@@ -56,6 +53,7 @@ export default class Server implements Party.Server {
 
     switch (parsed.action) {
       case "type":
+        if (this.game.currentTurn !== sender.id) return;
         this.game.typing = parsed.value!;
         break;
       case "guess":
@@ -64,7 +62,7 @@ export default class Server implements Party.Server {
         break;
       case "start":
         if (this.game.currentTurn) return;
-        startGame(this.game, this.submitGuess, () => this.sync());
+        startGame(this.game, this.submitGuess.bind(this), () => this.sync());
         break;
       case "message":
         this.game.messages.push(`${sender.id}: ${parsed.value!}`);
@@ -103,7 +101,8 @@ export default class Server implements Party.Server {
       console.log("Correct guess!");
       pickQuestion(this.game);
       clearTimeout(this.game.timer!);
-      nextTurn(this.game, this.submitGuess, () => this.sync());
+      this.game.timerDuration = MAX_GUESS_TIME;
+      nextTurn(this.game, this.submitGuess.bind(this), () => this.sync());
       this.game.typing = "";
       this.game.usedWords.push(guess);
       return true

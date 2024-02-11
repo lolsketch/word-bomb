@@ -137,6 +137,13 @@ async function getAllData() {
     "lethality",
     "ability",
     "spell",
+    "larmack",
+    "serpenoids",
+    "zooshi",
+    "zooshii",
+    "zooshiii",
+    "fuckamoli",
+    "kevin3570"
   ];
 
   extra_words.forEach((word) => cleaned_words.add(word));

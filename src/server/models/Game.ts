@@ -1,12 +1,22 @@
-import { MAX_LIVES, MIN_GUESS_TIME, NUM_LEVELS } from "../data/constants";
+import {
+  MAX_LIVES,
+  MIN_GUESS_TIME,
+  NUM_LEVELS,
+  MAX_GUESS_TIME,
+  STARTING_WEIGHTS,
+  DIFFICULTY_SCALING_FACTOR,
+  TIME_DECREASE_FACTOR,
+} from "../data/constants";
 import { questions } from "../data/levels_lol";
 import { type GameState } from "../types";
 import { sample } from "lodash";
 
 export function startGame(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
   game.currentTurn = sample(Object.keys(game.players))!;
+  game.timerDuration = MAX_GUESS_TIME;
   pickQuestion(game);
   startTurnTimer(game, submitGuess, sync);
+  game.difficultyWeights = { ...STARTING_WEIGHTS };
 
   for (const player of Object.values(game.players)) {
     player.lives = MAX_LIVES;
@@ -47,10 +57,8 @@ export function nextTurn(game: GameState, submitGuess: (guess: string, player: s
 }
 
 export function pickQuestion(game: GameState) {
-  //todo: real solution for this
-  if (Math.random() < 0.3) {
-    incrementWeights(game);
-  }
+  incrementWeights(game);
+
   const length = weightedRandom(game.difficultyWeights.length);
   const level = weightedRandom(game.difficultyWeights.level);
   const questionSet = questions[length + 2][level];
@@ -78,24 +86,24 @@ function incrementWeights(game: GameState) {
   // Shift the level weights over by 10% each round
   for (let i = 0; i < NUM_LEVELS - 1; i++) {
     game.difficultyWeights.level[i + 1] += Math.floor(
-      game.difficultyWeights.level[i] / 10
+      game.difficultyWeights.level[i] * DIFFICULTY_SCALING_FACTOR
     );
     game.difficultyWeights.level[i] = Math.floor(
-      (game.difficultyWeights.level[i] * 9) / 10
+      game.difficultyWeights.level[i] * (1 - DIFFICULTY_SCALING_FACTOR)
     );
   }
 
   // Shift the length weights over by 10% each round
   game.difficultyWeights.length[1] += Math.floor(
-    game.difficultyWeights.length[0] / 10
+    game.difficultyWeights.length[0] * DIFFICULTY_SCALING_FACTOR
   );
   game.difficultyWeights.length[0] = Math.floor(
-    (game.difficultyWeights.length[0] * 9) / 10
+    game.difficultyWeights.length[0] * (1 - DIFFICULTY_SCALING_FACTOR)
   );
 }
 
 export function startTurnTimer(game: GameState, submitGuess: (guess: string, player: string) => boolean, sync: () => void) {
-  game.timerDuration = Math.max(MIN_GUESS_TIME, game.timerDuration * 0.95);
+  game.timerDuration = Math.max(MIN_GUESS_TIME, game.timerDuration * TIME_DECREASE_FACTOR);
   game.timer = setTimeout(() => {
     const player = game.players[game.currentTurn!];
     const guess = game.typing;

@@ -103,6 +103,7 @@ export const Room = ({ game, playerId }: Props) => {
               key={id}
               player={playerState}
               playersTurn={state.currentTurn === id}
+              time={state.timerDuration}
               css={circle[index]}
             />
           );
