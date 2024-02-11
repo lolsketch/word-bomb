@@ -11,7 +11,7 @@
     "client:preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "server:dev": "rm -rf .partykit && partykit dev",
-    "deploy": "yarn client:build && cp words/levels.json dist/assets && partykit deploy"
+    "deploy": "yarn client:build && partykit deploy"
   },
   "dependencies": {
     "@types/node": "^20.11.17",
