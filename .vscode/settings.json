@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "search.exclude": {
+      "/node_modules": true,
+      "/bower_components": true,
+      "/*.code-search": true,
+      "**/levels_lol.ts": true,
+      "**/levels.json": true,
+      "**/words_alpha.txt": true,
+      "**/words.txt": true
+  }
+}

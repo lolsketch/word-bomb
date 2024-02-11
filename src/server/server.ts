@@ -7,6 +7,7 @@ import {
   startGame,
 } from "./models/Game";
 import { TIME_TO_GUESS } from "./data/constants";
+import { answers } from "./data/levels_lol";
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: false };
@@ -23,7 +24,7 @@ export default class Server implements Party.Server {
     timerDuration: TIME_TO_GUESS,
     difficultyWeights: {
       length: [100, 0],
-      level: [100, 0, 0, 0, 0]
+      level: [100, 0, 0, 0, 0],
     },
   };
 
@@ -61,7 +62,8 @@ export default class Server implements Party.Server {
         const guess = parsed.value;
 
         if (
-          this.game.question?.answer.includes(guess) &&
+          guess.includes(this.game.question?.question || "err") &&
+          answers.has(guess) &&
           !this.game.usedWords.includes(guess)
         ) {
           console.log("Correct guess!");

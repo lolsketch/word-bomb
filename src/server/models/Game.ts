@@ -54,11 +54,10 @@ export function pickQuestion(game: GameState) {
   const length = weightedRandom(game.difficultyWeights.length);
   const level = weightedRandom(game.difficultyWeights.level);
   const questionSet = questions[length + 2][level];
-  const question = sample(Object.keys(questionSet))!;
+  const question = sample(questionSet)!;
 
   game.question = {
     question,
-    answer: questionSet[question],
   };
 }
 

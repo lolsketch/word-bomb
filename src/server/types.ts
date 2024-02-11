@@ -25,12 +25,12 @@ export interface GameState {
   id: string;
   players: { [id: string]: PlayerState };
   currentTurn: PlayerID | null;
-  question: { question: string; answer: string[] } | null;
+  question: { question: string } | null;
   typing: string;
   timer: ReturnType<typeof setTimeout> | null;
   usedWords: string[];
   timerDuration: number;
-  difficultyWeights: { length: number[], level: number[]};
+  difficultyWeights: { length: number[]; level: number[] };
   messages: string[];
 }
 
